@@ -342,6 +342,14 @@ menuseparator {
   -moz-box-pack: center !important;
   -moz-box-flex: 1 !important;
 }
+.autocomplete-richlistitem[selected=true] {
+  color; red;
+}
+
+.autocomplete-richlistitem:hover {
+  
+  
+}
 
 .autocomplete-richlistitem * {
   color: var(--fontColor);
@@ -349,6 +357,13 @@ menuseparator {
 
 #PopupAutoCompleteRichResult .ac-url-text, #PopupAutoCompleteRichResult .ac-action-text {
    color: var(--c2);
+}
+
+
+ .autocomplete-richlistitem[selected=true] { 
+   background-color: #222;
+   border-bottom: 1px solid var(--c2);
+   border-top: 1px solid var(--c2);
 }
 
 
