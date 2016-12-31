@@ -1,0 +1,659 @@
+/* devedition.css is loaded in browser.xul after browser.css when it is
+   preffed on.  The bulk of the styling is here in the shared file, but
+   there are overrides for each platform in their devedition.css files. */
+
+:root {
+  --c1: #333333;
+  --c2: rgba(39, 131, 177, 1);
+  --c2a: rgba(39, 131, 177, .3);
+  --fontColor: #bdbdbd;
+  --todo: #ff69b4;
+  /* bright pink*/
+  --tab-toolbar-navbar-overlap: 0px;
+  --navbar-tab-toolbar-highlight-overlap: 0px;
+  --space-above-tabbar: 0px;
+  --toolbarbutton-text-shadow: none;
+  --backbutton-urlbar-overlap: 0px;
+  --tab-selection-box-shadow: 0 5px 0 var(--c2) inset, 1px 0 0 var(--c2) inset, -1px 0 0 var(--c2) inset, 0 -1px 0 var(--c1) inset
+  /*0 -2px 0 var(--c2) inset */
+  ;
+}
+
+:root[devtoolstheme="light"] {
+  --pinned-tab-glow: radial-gradient(22px at center calc(100% - 2px), rgba(76, 158, 217, 0.9) 13%, transparent 16%);
+}
+
+
+/*change new tab background*/
+
+@-moz-document url("about:newtab") {
+  body {
+    background: #333333;
+    background-size: cover;
+    opacity: 0.7;
+    transition: opacity 3s ease-in-out;
+    background: #333333 url("https://d11xdyzr0div58.cloudfront.net/static/logos/archlinux-logo-dark-1200dpi.b42bd35d5916.png") no-repeat left center fixed;
+    width: 100%;
+    height: 600px;
+    background-size: 100%;
+  }
+}
+
+
+/* Give some space to drag the window around while customizing
+   (normal space to left and right of tabs doesn't work in this case) */
+
+#main-window[tabsintitlebar][customizing] {
+  --space-above-tabbar: 9px;
+}
+
+
+/* Override @tabCurveHalfWidth@ and @tabCurveWidth@.  XXX: Switch to a CSS variable once the perf is sorted out - bug 1088771 
+------------------------------------------------------------------------------------------------------------------------------------
+*/
+
+.tab-background-middle {
+  border-left-width: 0;
+  border-right-width: 0;
+  margin: 0;
+}
+
+.tab-background, .tabs-newtab-button {
+  margin-inline-end: 0;
+  margin-inline-start: 0;
+}
+
+.tabbrowser-arrowscrollbox > .arrowscrollbox-scrollbox {
+  padding-inline-end: 0;
+  padding-inline-start: 0;
+}
+
+.tab-background-start[visuallyselected=true]::after, .tab-background-start[visuallyselected=true]::before, .tab-background-start, .tab-background-end, .tab-background-end[visuallyselected=true]::after, .tab-background-end[visuallyselected=true]::before {
+  width: 0;
+}
+
+.tab-background-start[visuallyselected=true]::after, .tab-background-end[visuallyselected=true]::after {
+  margin-inline-start: 0;
+}
+
+
+/* End override @tabCurveHalfWidth@ and @tabCurveWidth@ 
+------------------------------------------------------------------------------------------------------------------------------------
+*/
+
+
+/* url ad search bar text highlight color and text color when selected*/
+
+#urlbar::-moz-selection, #navigator-toolbox .searchbar-textbox::-moz-selection, .browserContainer > findbar::-moz-selection {
+  background-color: var(--c2);
+  color: var(--c1);
+}
+
+
+/* Change the base colors for the browser chrome */
+
+#tabbrowser-tabs, #TabsToolbar, #browser-panel {
+  background: var(--c1);
+  color: var(--c2);
+}
+
+#navigator-toolbox:-moz-lwtheme::after {
+  background: var(--todo);
+}
+
+
+/* browserContainer is the bar under the tabs that contains the search bars and other buttons */
+
+#navigator-toolbox > toolbar:not(#TabsToolbar):not(#toolbar-menubar), .browserContainer > findbar, #browser-bottombox {
+  background-color: var(--c1) !important;
+  background-image: none !important;
+  /*text color on the unselected search bars*/
+  color: var(--c2);
+}
+
+
+/* Default findbar text color doesn't look good - Bug 1125677 */
+
+.browserContainer > findbar .findbar-find-status, .browserContainer > findbar .found-matches {
+  color: inherit;
+}
+
+
+/* detail color of the items in the browserContainer, e.g the line that divides the bookmarks icons */
+
+#navigator-toolbox .toolbarbutton-1, .browserContainer > findbar .findbar-button, #PlacesToolbar toolbarbutton.bookmark-item {
+  /* uncomment to border this items
+  border: 1px solid white;*/
+  color: var(--c2);
+  text-shadow: var(--todo);
+}
+
+
+/* Using toolbar[brighttext] instead of important to override linux */
+
+toolbar[brighttext] #downloads-indicator-counter {
+  text-shadow: var(--todo);
+  color: var(--todo);
+}
+
+#TabsToolbar {
+  text-shadow: none !important;
+  color: var(--todo) !important;
+  /* Make sure that the brighttext attribute is added */
+}
+
+
+/* URL bar and search bar background color and text*/
+
+#urlbar, #navigator-toolbox .searchbar-textbox {
+  background-color: var(--c1) !important;
+  background-image: none !important;
+  color: inherit !important;
+  border: 1px solid transparent !important;
+  ;
+  box-shadow: none !important;
+}
+
+#urlbar[focused],
+/* URL [left] bar color/effects when its selected */
+
+#navigator-toolbox .searchbar-textbox[focused],
+/* Search [right] bar color/effects when its selected */
+
+:root.browserContainer > findbar[focused] .findbar-textbox[focused] {
+  /* the border on the search boxes. change to c2a or set it to transparent if you dont like it */
+  border: 1px solid var(--c2) !important;
+  transition: 0.5s;
+}
+
+#urlbar:hover, #navigator-toolbox .searchbar-textbox:hover, :root.browserContainer > findbar:hover .findbar-textbox:hover {
+  border: 1px solid var(--c2) !important;
+  transition: 2s;
+}
+
+
+/* this gives the illusion that the search bar is underneath the back-button
+I dont like that. Uncomment of you want it back */
+
+
+/*
+#urlbar {
+  border-inline-start: none !important;
+  opacity: 1 !important;
+}
+*/
+
+window:not([chromehidden~="toolbar"]) #urlbar-wrapper {
+  overflow: -moz-hidden-unscrollable;
+  clip-path: none;
+  margin-inline-start: 0;
+}
+
+
+/* Nav bar specific stuff */
+
+#nav-bar {
+  margin-top: 0 !important;
+  border-top: none !important;
+  border-bottom: none !important;
+  border-radius: 0 !important;
+  box-shadow: 0 -1px var(--c2) !important;
+}
+
+
+/* extra vertical padding for nav bar, because reasons */
+
+#nav-bar-customization-target, #nav-bar {
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+
+/*
+ Use smaller back button icon 
+I dont like this at all
+#back-button {
+  -moz-image-region: rect(0, 54px, 18px, 36px);
+}
+
+@media (min-resolution: 1.1dppx) {
+  #back-button {
+    -moz-image-region: rect(0, 108px, 36px, 72px);
+  }
+}
+*/
+
+
+/* ---------------------------------------------------------------------------------------------------------------------- */
+
+
+/* hide the curved default style of tabs */
+
+.tab-background {
+  visibility: hidden;
+}
+
+
+/* Tab separators */
+
+.tabbrowser-tab::after, .tabbrowser-tab::before {
+  background: currentColor;
+  opacity: .5!important;
+  /* TODO */
+}
+
+
+/* BG the color of the lateral arrows that appear when you open a lot of tabs */
+
+.tabbrowser-arrowscrollbox > .scrollbutton-down, .tabbrowser-arrowscrollbox > .scrollbutton-up {
+  background-color: var(--c2);
+  border-color: transparent;
+}
+
+.tabbrowser-tab {
+  /* We normally rely on other tab elements for pointer events, but this
+     theme hides those so we need it set here instead */
+  pointer-events: auto;
+  color: var(--fontColor) !important;
+  ;
+}
+
+
+/*
+forcing the tab font color above with !important also changes the tab line/separator, so we need to set it manually.
+another option is to have blue text and delete the above `color` line and all this block 
+Make the tab splitter 1px wide with a solid background.                      
+*/
+
+#tabbrowser-tabs[movingtab] > .tabbrowser-tab[beforeselected]:not([last-visible-tab])::after, .tabbrowser-tab:not([visuallyselected]):not([afterselected-visible]):not([afterhovered]):not([first-visible-tab]):not(:hover)::before, #tabbrowser-tabs:not([overflow]) > .tabbrowser-tab[last-visible-tab]:not([visuallyselected]):not([beforehovered]):not(:hover)::after {
+  background: var(--c2);
+  width: 1px;
+  -moz-margin-start: 0;
+  -moz-margin-end: -1px;
+}
+
+.tabbrowser-tab:-moz-any([image], [pinned]) > .tab-stack > .tab-content[attention]:not([visuallyselected="true"]), .tabbrowser-tab > .tab-stack > .tab-content[pinned][titlechanged]:not([visuallyselected="true"]) {
+  background-image: var(--pinned-tab-glow);
+  background-position: center;
+  background-size: 100%;
+}
+
+.tabbrowser-tab[image] > .tab-stack > .tab-content[attention]:not([pinned]):not([visuallyselected="true"]) {
+  background-position: left bottom var(--tab-toolbar-navbar-overlap);
+  background-size: 34px 100%;
+}
+
+.tabbrowser-arrowscrollbox > .scrollbutton-down:not([disabled]):hover, .tabbrowser-arrowscrollbox > .scrollbutton-up:not([disabled]):hover, .tabbrowser-tab:hover {
+  background-color: var(--c2);
+  transition: .5s;
+  color: var(--c1);
+}
+
+.tabbrowser-tab[visuallyselected] {
+  color: var(--fontColor) !important;
+  /* Override color: inherit */
+  background-color: var(--c1);
+  /* the blue line above the selected tab */
+  box-shadow: var(--tab-selection-box-shadow);
+  transition: 0.5s;
+}
+
+
+/*
+.tab-icon-sound[visuallyselected=true][soundplaying] {
+  list-style-image: url("chrome://browser/skin/tabbrowser/tab-audio.svg#tab-audio-white");
+}
+.tab-icon-sound[visuallyselected=true][soundplaying]:hover {
+  list-style-image: url("chrome://browser/skin/tabbrowser/tab-audio.svg#tab-audio-white-hover");
+}
+.tab-icon-sound[visuallyselected=true][soundplaying]:hover:active {
+  list-style-image: url("chrome://browser/skin/tabbrowser/tab-audio.svg#tab-audio-white-pressed");
+}
+.tab-icon-sound[visuallyselected=true][muted] {
+  list-style-image: url("chrome://browser/skin/tabbrowser/tab-audio.svg#tab-audio-muted-white");
+}
+.tab-icon-sound[visuallyselected=true][muted]:hover {
+  list-style-image: url("chrome://browser/skin/tabbrowser/tab-audio.svg#tab-audio-muted-white-hover");
+}
+.tab-icon-sound[visuallyselected=true][muted]:hover:active {
+  list-style-image: url("chrome://browser/skin/tabbrowser/tab-audio.svg#tab-audio-muted-white-pressed");
+}
+*/
+
+
+/* Don't need space for the tab curves (66px - 30px) */
+
+.tabs-newtab-button {
+  width: 36px;
+}
+
+.tabs-newtab-button:hover {
+  /* Important needed because !important is used in browser.css */
+  background-color: var(--c2) !important;
+  background-image: none;
+  transition: .5s;
+}
+
+
+/* ---------------------------------------------------------------------------------------------------------------------- */
+
+:root {
+  --forwardbutton-width: 29px;
+}
+
+
+/* The window background is white due to no accentcolor in the lightweight
+   theme. It can't be changed to transparent when there is no compositor
+   (Win XP or 7 in classic / basic theme), or else dragging and focus become
+   broken. So instead just show the normal titlebar in that case, and override
+   the window color as transparent when the compositor is available. */
+
+@media not all and (-moz-windows-compositor) {
+  #main-window[tabsintitlebar] #titlebar:-moz-lwtheme {
+    visibility: visible;
+  }
+  #main-window {
+    background: var(--c1) !important;
+  }
+}
+
+@media (-moz-windows-compositor) {
+  #main-window {
+    background: transparent !important;
+  }
+}
+
+#TabsToolbar::after {
+  display: none;
+}
+
+#back-button > .toolbarbutton-icon, #forward-button > .toolbarbutton-icon {
+  background: var(--c1) !important;
+  border-radius: 0 !important;
+  height: auto !important;
+  /* error on purpose TODO*/
+  padding: var(--toolbarbutton-vertical-inner-padding) 5px !important;
+  margin: 0 !important;
+  border: 1px solid var(--c2) !important;
+  box-shadow: none !important;
+}
+
+#back-button > .toolbarbutton-icon {
+  /* 18px icon + 2 * 5px padding + 2 * 1px border */
+  width: 30px !important;
+}
+
+#forward-button > .toolbarbutton-icon {
+  /* 18px icon + 2 * 5px padding + 1 * 1px border */
+  width: 29px !important;
+}
+
+
+/* the normal theme adds box-shadow: <stuff> !important when the back-button is [open]. Fix: */
+
+#back-button[open="true"] > .toolbarbutton-icon {
+  box-shadow: none !important;
+}
+
+#forward-button > .toolbarbutton-icon {
+  border-inline-start: none !important;
+}
+
+
+/* Override a box shadow for disabled back button */
+
+#main-window:not([customizing]) #back-button[disabled] > .toolbarbutton-icon {
+  box-shadow: none !important;
+}
+
+
+/* Override !important properties for hovered back button */
+
+#main-window #back-button:hover:not([disabled="true"]) > .toolbarbutton-icon, #main-window #forward-button:hover:not([disabled="true"]) > .toolbarbutton-icon {
+  background: var(--c2) !important;
+  transition: 1s;
+  box-shadow: none !important;
+}
+
+#back-button > .toolbarbutton-icon {
+  border-radius: 2px 0 0 12px !important;
+}
+
+#nav-bar .toolbarbutton-1:not([type=menu-button]), #nav-bar .toolbarbutton-1 > .toolbarbutton-menubutton-button, #nav-bar .toolbarbutton-1 > .toolbarbutton-menubutton-dropmarker {
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+
+/* override tabs bg color 
+.tabbrowser-tab {
+  background-color: var(--c1);
+  border: 1px solid var(--c2);
+}
+*/
+
+#toolbar-menubar {
+  text-shadow: none !important;
+}
+
+.verifiedIdentity#identity-box, #identity-box * {
+  background-color: var(--c1) !important;
+  ;
+}
+
+:root[devtoolstheme="dark"] .findbar-closebutton, :root[devtoolstheme="dark"] #sidebar-header > .close-icon,
+/* Tab styling - make sure to use an inverted icon for the selected tab
+   (brighttext only covers the unselected tabs) */
+
+.tab-close-button[visuallyselected=true] {
+  list-style-image: url("chrome://global/skin/icons/close-inverted.png");
+}
+
+@media (min-resolution: 1.1dppx) {
+  :root[devtoolstheme="dark"] .findbar-closebutton, :root[devtoolstheme="dark"] #sidebar-header > .close-icon, .tab-close-button[visuallyselected=true] {
+    list-style-image: url("chrome://global/skin/icons/close-inverted@2x.png");
+  }
+}
+
+@media (-moz-os-version: windows-xp), (-moz-os-version: windows-vista), (-moz-os-version: windows-win7), (-moz-os-version: windows-win8) {
+  :root {
+    --space-above-tabbar: 15px;
+  }
+  /* It'd be nice if there was an element in the scrollbox's inner content
+     that collapsed to the current width of the tabs. Since there isn't we
+     need to handle overflowing and non-overflowing tabs separately.
+
+     In the case of overflowing tabs, set a border-top on the entire container,
+     otherwise we need to set it on each element individually */
+  #main-window[sizemode=normal] .tabbrowser-tabs[overflow="true"] {
+    background-clip: padding-box;
+    border-top: 1px solid var(--c2);
+    border-inline-end: 1px solid var(--c2);
+    background-color: var(--c1);
+    /* Make sure there is no transparent gap during tab close animation */
+  }
+  /* Add a border to the left of the first tab (or scroll arrow).  Using .tabbrowser-tabs
+     instead of #TabsToolbar because it will work even in customize mode. */
+  #main-window[sizemode=normal] .tabbrowser-tabs {
+    background-clip: padding-box;
+    border-inline-start: 1px solid var(--c2);
+    border-inline-end: 1px solid transparent;
+  }
+  #main-window[sizemode=normal] .tabbrowser-tabs:not([overflow="true"]) .tabbrowser-tab, #main-window[sizemode=normal] .tabbrowser-tabs:not([overflow="true"]) .tabbrowser-arrowscrollbox > .scrollbutton-down, #main-window[sizemode=normal] .tabbrowser-tabs:not([overflow="true"]) .tabbrowser-arrowscrollbox > .scrollbutton-up, #main-window[sizemode=normal] .tabbrowser-tabs:not([overflow="true"]) .tabs-newtab-button {
+    background-clip: padding-box;
+    border-top: 1px solid var(--c2);
+  }
+  /* Allow the border-top rule to take effect */
+  #main-window[sizemode=normal] .tabbrowser-tabs:not([overflow="true"]) .tabbrowser-tab {
+    -moz-border-top-colors: none;
+  }
+  #main-window[sizemode=normal] .tabbrowser-tabs:not([overflow="true"]) .closing-tabs-spacer {
+    background-clip: padding-box;
+    border-inline-start: 1px solid var(--c2);
+  }
+  .tabs-newtab-button {
+    background: var(--c1);
+  }
+  /* Use default window colors when in non-maximized mode */
+  #tabbrowser-tabs, #TabsToolbar, #browser-panel, #titlebar-content {
+    background: transparent;
+  }
+  /* Ensure that the entire background is styled when maximized/fullscreen */
+  #main-window:not([sizemode="normal"]):not([customizing]) #browser-panel {
+    background: var(--c2) !important;
+  }
+  /* The menu items need to be visible when the entire background is styled */
+  #main-window:not([sizemode="normal"]) #main-menubar {
+    color: var(--c2);
+    background-color: transparent;
+  }
+  #main-window[sizemode="maximized"] #main-menubar > menu:not(:-moz-window-inactive) {
+    color: inherit;
+  }
+  /* Use proper menu text styling in Win7 classic mode (copied from browser.css) */
+  @media not all and (-moz-windows-compositor), not all and (-moz-windows-default-theme) {
+    #main-window[tabsintitlebar]:not([inFullscreen]) #toolbar-menubar, #main-window[tabsintitlebar]:not([inFullscreen]) #TabsToolbar {
+      color: CaptionText;
+    }
+    #main-window[tabsintitlebar]:not([inFullscreen]) #toolbar-menubar:-moz-window-inactive, #main-window[tabsintitlebar]:not([inFullscreen]) #TabsToolbar:-moz-window-inactive {
+      color: InactiveCaptionText;
+    }
+    #main-window[tabsintitlebar] #main-menubar > menu {
+      color: inherit;
+    }
+  }
+  /* Use less opacity than normal since this is very dark, and on top of the default toolbar color */
+  .tabbrowser-arrowscrollbox > .scrollbutton-up[disabled], .tabbrowser-arrowscrollbox > .scrollbutton-down[disabled] {
+    opacity: .6;
+  }
+  /* Override scrollbutton gradients in normal and hover state */
+  .tabbrowser-arrowscrollbox > .scrollbutton-down, .tabbrowser-arrowscrollbox > .scrollbutton-up {
+    background-image: none !important;
+    transition: none;
+    /* scrollbutton-down has an unwanted transition on background color */
+  }
+  /* Restore draggable space on the sides of tabs when maximized */
+  #main-window[sizemode="maximized"] .tabbrowser-arrowscrollbox > .arrowscrollbox-scrollbox {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  /* Override the padding that's intended to compensate for tabs that can overlap border-radius on nav-bar in default theme. */
+  #main-window[sizemode=normal]:not([customizing]) #TabsToolbar {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+
+/* Restored windows get an artificial border on windows, because the lwtheme background
+ * overlaps the regular window border. That isn't the case for us, so we avoid painting
+ * over the native border with our custom borders: */
+
+#browser-panel {
+  /* These are !important to avoid specificity-wars with the selectors that add borders here. */
+  background-image: none !important;
+  border-top: none !important;
+}
+
+#navigator-toolbox {
+  /* The side borders on the toolbox also look out-of-place because we don't paint over
+   * the native background color at all, and these are !important for the same reason as above. */
+  border-left: none !important;
+  border-right: none !important;
+}
+
+
+/* Disable dragging like in the default theme: */
+
+#main-window[tabsintitlebar] #navigator-toolbox > toolbar:not(#toolbar-menubar):not(#TabsToolbar):-moz-lwtheme {
+  -moz-window-dragging: no-drag;
+}
+
+
+/* The sidebar header has no background now that the background of the #browser-panel
+ * has no image and is transparent. Fix: */
+
+.sidebar-header:-moz-lwtheme, #sidebar-header {
+  background-color: var(--c1);
+  color: var(--fontColor);
+  border-color: var(--c1);
+}
+
+@media (-moz-os-version: windows-vista), (-moz-os-version: windows-win7), (-moz-os-version: windows-win8) {
+  /* And then we add them back on toolbars so that they don't look borderless: */
+  #main-window:not([customizing])[sizemode=normal] #navigator-toolbox::after, #main-window:not([customizing])[sizemode=normal] #navigator-toolbox > toolbar:not(#toolbar-menubar):not(#TabsToolbar) {
+    border-left: 1px solid hsla(209, 67%, 12%, 0.35);
+    border-right: 1px solid hsla(209, 67%, 12%, 0.35);
+  }
+}
+
+@media (-moz-os-version: windows-win10) {
+  /* Always keep draggable space on the sides of tabs since there is no top margin on Win10 */
+  #main-window .tabbrowser-arrowscrollbox > .arrowscrollbox-scrollbox {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  /* Force white caption buttons for the dark theme on Windows 10 */
+  #titlebar-min {
+    list-style-image: url(chrome://browser/skin/caption-buttons.svg#minimize-white);
+    background-color: var(--c2a);
+  }
+  #titlebar-max {
+    list-style-image: url(chrome://browser/skin/caption-buttons.svg#maximize-white);
+    background-color: var(--c2a);
+  }
+  [sizemode="maximized"] #titlebar-max {
+    background-color: var(--c2a);
+    /*  doesnt seem to be working    */
+    list-style-image: url(chrome://browser/skin/caption-buttons.svg#restore-white);
+  }
+  #titlebar-close {
+    list-style-image: url(chrome://browser/skin/caption-buttons.svg#close-white);
+    background-color: var(--c2a);
+  }
+  toolbarbutton.titlebar-button#titlebar-min:hover, #titlebar-max:hover {
+    background-color: var(--c2);
+  }
+}
+
+.ac-type-icon {
+  /* Left-align the type icon in awesomebar popup results with the icon in the
+     urlbar. */
+  margin-inline-start: 13px;
+}
+
+
+/* autocomplete list */
+
+
+/* 
+  change color of the autocomplete /  suggestions panel 
+*/
+
+#PopupAutoCompleteRichResult>* {
+  background-color: var(--c1);
+  border: transparent;
+  border-top: 1px solid var(--c2);
+  /* height: 30rem ;*/
+}
+
+
+/* url color of the currently selectd item */
+
+#PopupAutoCompleteRichResult .ac-url-text, #PopupAutoCompleteRichResult .ac-action-text {
+  color: var(--c2);
+}
+
+.autocomplete-richlistitem[selected=true] {
+  background-color: #222;
+  border-bottom: 1px solid var(--c2);
+  border-top: 1px solid var(--c2);
+  transition: .25s;
+}
+
+
+/* ******************************************** */
+
+#navigator-toolbox::after {
+  display: none !important;
+}
